@@ -1,0 +1,25 @@
+{
+  "type": "module",
+  "name": "ctrl-z-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node --env-file=.env src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliasercs/ctrl-z-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eliasercs/ctrl-z-backend/issues"
+  },
+  "homepage": "https://github.com/eliasercs/ctrl-z-backend#readme",
+  "dependencies": {
+    "discord.js": "^14.25.1"
+  }
+}
