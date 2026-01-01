@@ -1,8 +1,11 @@
 import process from "node:process"
 import { bootstrap } from "./bootstrap/bootstrap.js"
 
-const bot = bootstrap({
+const {discordBot, httpServer} = bootstrap({
     DISCORD_TOKEN: process.env.DISCORD_TOKEN
 })
 
-bot.start()
+discordBot.start()
+httpServer.listen(3000, () => {
+    console.log("HTTP server listening on port 3000")
+})
