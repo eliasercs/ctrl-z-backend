@@ -1,8 +1,10 @@
 import { Client, GatewayIntentBits } from "discord.js"
 import Member from "../../../domain/entities/member.js"
 import WelcomeNewMember from "../../../application/use-cases/welcome_new_member.js"
+import CreateMemberRole from "../../../application/use-cases/create_member_role.js"
 import CanvasWelcomeImageAdapter from "../image/welcome.js"
 import DiscordWelcomeMessageAdapter from "./welcome.js"
+import DiscordRoleRepository from "./role_repository.js"
 
 export class DiscordBotAdapter {
     constructor(token, messageAdapter) {
@@ -11,7 +13,7 @@ export class DiscordBotAdapter {
                 GatewayIntentBits.Guilds,
                 GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildMembers
+                GatewayIntentBits.GuildMembers,
             ]
         })
 
@@ -22,6 +24,11 @@ export class DiscordBotAdapter {
     async start() {
         this.client.once("clientReady", () => {
             console.log(`Bot conectado como ${this.client.user.tag}`)
+        })
+
+        this.client.on("guildCreate", async (guild) => {
+            const useCase = new CreateMemberRole(new DiscordRoleRepository(this.client))
+            await useCase.execute(guild.id)
         })
 
         this.client.on("messageCreate", async (message) => {

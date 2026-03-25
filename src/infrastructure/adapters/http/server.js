@@ -1,18 +1,25 @@
 import express from "express"
-import GetGuildMembers from "../../../application/use-cases/get_guild_members.js"
 
-export default function createServer(guildRepository) {
-    const app = express()
+export default class Server {
+    constructor({ port, guildRouter }) {
+        this.app = express()
+        this.port = port || 3000
+        this.guildRouter = guildRouter
+        this.middlewares()
+        this.routes()
+    }
 
-    app.get("/guilds/:guildId/members", async (req, res) => {
-        try {
-            const useCase = new GetGuildMembers(guildRepository)
-            const members = await useCase.execute(req.params.guildId)
-            res.json(members)
-        } catch (error) {
-            res.status(500).json({ error: error.message })
-        }
-    })
+    middlewares() {
+        this.app.use(express.json())
+    }
 
-    return app
+    routes() {
+        this.app.use("/api/guilds", this.guildRouter)
+    }
+
+    listen() {
+        this.app.listen(this.port, () => {
+            console.log(`Server is running on port ${this.port}`)
+        })
+    }
 }
